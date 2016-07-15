@@ -1,4 +1,4 @@
-package tech.artisanhub;
+package tech.artisanhub.ShapeletTrainer;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

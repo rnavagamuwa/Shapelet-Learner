@@ -1,4 +1,4 @@
-package tech.artisanhub;
+package tech.artisanhub.ShapeletTrainer;
 
 
 /*
