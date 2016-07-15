@@ -1,4 +1,7 @@
-package tech.artisanhub.ShapeletTrainer;
+package tech.artisanhub.ARFFGenerator;
+
+import tech.artisanhub.ShapeletTrainer.UCRUtils;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
