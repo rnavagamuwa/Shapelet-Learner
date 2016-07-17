@@ -13,9 +13,9 @@ import java.util.Map.Entry;
 
 public class UCRtoARFF {
 
-    private static final String TRAINING_DATA = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/pima-indians-diabetes.data";
+    private static final String TRAINING_DATA = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/DEBS-2013-SoccerField/result_1st_goal.ucr";
 
-    private static final String OUTPUT_DATA = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/pima-indians-diabetes.arff";
+    private static final String OUTPUT_DATA = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/DEBS-2013-SoccerField/ARFF_result_1st_goal.arff";
 
     private static final String CR = "\n";
 
