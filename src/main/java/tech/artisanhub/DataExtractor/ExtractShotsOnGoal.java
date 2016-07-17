@@ -8,7 +8,7 @@ public class ExtractShotsOnGoal {
         BigDecimal val1 =    new BigDecimal("10629342490369879");
         BigDecimal picoVal = new BigDecimal("1000000000000");
 
-   //Extracting the data relevant to first goal
+   //Extracting the data relevant to first goal. Provide the time period in seconds
         BigDecimal startTimeInPicoSec = new BigDecimal("426").multiply(picoVal).add(val1);
         BigDecimal endTimeInPicoSec = new BigDecimal("450").multiply(picoVal).add(val1);
         FileInputStream inputStream = null;
