@@ -24,12 +24,10 @@ public class ExtractShotsOnGoal {
 
             String line = null;
             BigDecimal currentTime;
-            int count = 0;
             while ((line = reader.readLine())!= null){
                 currentTime = new BigDecimal(line.split(",")[1]);
                 if (currentTime.compareTo(startTimeInPicoSec)>0){
                     writer.write(line.concat("\n"));
-                    count ++;
                 }
                 if (currentTime.compareTo(endTimeInPicoSec)>0){
                     break;
