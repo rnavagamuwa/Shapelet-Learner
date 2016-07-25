@@ -8,7 +8,7 @@ public class RandomSampleData {
     public static void main(String args[]){
         BigDecimal val1 =    new BigDecimal("10629342490369879");
         BigDecimal picoVal = new BigDecimal("1000000000000");
-
+        int thresholdVal = 5;
 
         //Enter the value sampling value. To remove evey pico second values enter 1000000000000
         BigDecimal resolutionInPicoSeconds = new BigDecimal("1000000000000");
@@ -28,19 +28,23 @@ public class RandomSampleData {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
 
             String line = null;
-            BigDecimal counter = resolutionInPicoSeconds;
+            BigDecimal counter = resolutionInPicoSeconds.add(startTimeInPicoSec);
             BigDecimal currentTime;
+            int thresholdTemp = thresholdVal;
             while ((line = reader.readLine())!= null){
-                if (counter.compareTo(new BigDecimal("0"))!=0){
-                    counter = counter.subtract(new BigDecimal("1"));
-                    continue;
-                }else if (counter.compareTo(new BigDecimal("0"))==0){
-                    counter = resolutionInPicoSeconds;
-                }
                 currentTime = new BigDecimal(line.split(",")[1]);
-                if (currentTime.compareTo(startTimeInPicoSec)>0){
-                    writer.write(line.concat("\n"));
+
+                if (counter.compareTo(currentTime)>0){
+                    continue;
                 }
+
+                if (currentTime.compareTo(startTimeInPicoSec)>0 && thresholdTemp>0){
+                    writer.write(line.concat("\n"));
+                    thresholdTemp --;
+                    continue;
+                }
+                thresholdTemp = 5;
+                counter = counter.add(resolutionInPicoSeconds);
                 if (currentTime.compareTo(endTimeInPicoSec)>0){
                     break;
                 }
