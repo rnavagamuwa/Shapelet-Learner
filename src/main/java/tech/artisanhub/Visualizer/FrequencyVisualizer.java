@@ -4,23 +4,33 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.RefineryUtilities;
 import weka.core.Instances;
-import java.io.FileReader;
+
+import java.io.*;
 import java.util.TreeMap;
 
 public class FrequencyVisualizer {
-    public static void main(String []args){
+    public static void main(String []args) throws IOException {
 
         String inputARFFDataSetPath = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/arff-pima-indians-diabetes.data";
         Instances data = loadData(inputARFFDataSetPath);
         TreeMap<Double, Integer> classDistributions = getClassDistributions(data);
 
+        CategoryDataset categoryInputDataset = createInputDataSet(classDistributions,data.size());
+        BarChart_AWT chartInputData = new BarChart_AWT("Shapelet Learner Visualizer", "Probabilities of the input dataset","Category","Probability",categoryInputDataset);
+        chartInputData.pack( );
+        RefineryUtilities.centerFrameOnScreen( chartInputData );
+        chartInputData.setVisible( true );
 
-        final DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
-        CategoryDataset categoryDataset = createDataSet(classDistributions,data.size(),dataset);
-        BarChart_AWT chart = new BarChart_AWT("Shapelet Learner Visualizer", "Probabilities of the input dataset","Category","Probability",categoryDataset);
-        chart.pack( );
-        RefineryUtilities.centerFrameOnScreen( chart );
-        chart.setVisible( true );
+
+        String shapeletPath = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/shapeletsOut.txt";
+        FileInputStream inputStream = new FileInputStream(shapeletPath);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        CategoryDataset categoryShapeletDataset = createShapeletDataSet(reader,100);
+        BarChart_AWT chartShapelets = new BarChart_AWT("Shapelet Learner Visualizer", "Information gain of the shapelets","Category","Information Gain",categoryShapeletDataset);
+        chartShapelets.pack( );
+        RefineryUtilities.centerFrameOnScreen( chartShapelets );
+        chartShapelets.setVisible( true );
 
     }
 
@@ -63,8 +73,9 @@ public class FrequencyVisualizer {
         return data;
     }
 
-    private static CategoryDataset createDataSet(TreeMap<Double, Integer> classDistributions,float totalRowCount,DefaultCategoryDataset dataset){
+    private static CategoryDataset createInputDataSet(TreeMap<Double, Integer> classDistributions,float totalRowCount){
 
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
         final Object[] keySet = classDistributions.keySet().toArray();
         float percentage;
 
@@ -73,7 +84,23 @@ public class FrequencyVisualizer {
             percentage = percentage * 100;
             dataset.addValue(percentage,keySet[i].toString(),"Input");
         }
-
         return dataset;
+    }
+
+    private static CategoryDataset createShapeletDataSet(BufferedReader reader, int noOfShapeletsToVisualize) throws IOException {
+
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+        int count =1;
+        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+            String[] temp = line.split(",");
+            Float percentageVal = Float.valueOf(temp[0])*100;
+            dataset.addValue(percentageVal,String.valueOf(count),"Shapelets");
+            reader.readLine();
+            count++;
+            if (count>noOfShapeletsToVisualize)
+                break;
+        }
+
+        return  dataset;
     }
 }
