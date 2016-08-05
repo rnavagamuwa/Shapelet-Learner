@@ -15,7 +15,9 @@ public class FrequencyVisualizer {
         TreeMap<Double, Integer> classDistributions = getClassDistributions(data);
 
 
-        BarChart_AWT chart = new BarChart_AWT("Shapelet Learner Visualizer", "Probabilities of the input dataset","Category","Probability",createInputDataSet(classDistributions,data.size()));
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+        CategoryDataset categoryDataset = createDataSet(classDistributions,data.size(),dataset);
+        BarChart_AWT chart = new BarChart_AWT("Shapelet Learner Visualizer", "Probabilities of the input dataset","Category","Probability",categoryDataset);
         chart.pack( );
         RefineryUtilities.centerFrameOnScreen( chart );
         chart.setVisible( true );
@@ -61,10 +63,9 @@ public class FrequencyVisualizer {
         return data;
     }
 
-    private static CategoryDataset createInputDataSet(TreeMap<Double, Integer> classDistributions,float totalRowCount){
+    private static CategoryDataset createDataSet(TreeMap<Double, Integer> classDistributions,float totalRowCount,DefaultCategoryDataset dataset){
 
         final Object[] keySet = classDistributions.keySet().toArray();
-        final DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
         float percentage;
 
         for(int i=0;i<keySet.length;i++){
