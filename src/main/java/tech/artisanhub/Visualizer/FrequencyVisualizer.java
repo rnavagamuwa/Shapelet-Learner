@@ -1,16 +1,28 @@
 package tech.artisanhub.Visualizer;
 
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.RefineryUtilities;
 import weka.core.Instances;
 import java.io.FileReader;
 import java.util.TreeMap;
 
 public class FrequencyVisualizer {
     public static void main(String []args){
+
         String inputARFFDataSetPath = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/arff-pima-indians-diabetes.data";
         Instances data = loadData(inputARFFDataSetPath);
         TreeMap<Double, Integer> classDistributions = getClassDistributions(data);
-        System.out.print(classDistributions.get(0.0));
+
+
+        BarChart_AWT chart = new BarChart_AWT("Shapelet Learner Visualizer", "Probabilities of the input dataset","Category","Probability",createInputDataSet(classDistributions,data.size()));
+        chart.pack( );
+        RefineryUtilities.centerFrameOnScreen( chart );
+        chart.setVisible( true );
+
     }
+
+
 
     private static TreeMap<Double, Integer> getClassDistributions(Instances data) {
         TreeMap<Double, Integer> classDistribution = new TreeMap<Double, Integer>();
@@ -33,7 +45,7 @@ public class FrequencyVisualizer {
         return classDistribution;
     }
 
-    public static Instances loadData(String fileName) {
+    private static Instances loadData(String fileName) {
         Instances data = null;
         try {
             FileReader r;
@@ -47,5 +59,20 @@ public class FrequencyVisualizer {
             e.printStackTrace();
         }
         return data;
+    }
+
+    private static CategoryDataset createInputDataSet(TreeMap<Double, Integer> classDistributions,float totalRowCount){
+
+        final Object[] keySet = classDistributions.keySet().toArray();
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+        float percentage;
+
+        for(int i=0;i<keySet.length;i++){
+            percentage = classDistributions.get(keySet[i])/totalRowCount;
+            percentage = percentage * 100;
+            dataset.addValue(percentage,keySet[i].toString(),"Input");
+        }
+
+        return dataset;
     }
 }
