@@ -6,20 +6,25 @@ import java.util.TreeMap;
 
 public  class Shapelet implements Comparable<Shapelet> {
     protected double[] content;
+    protected double[][] contentInMergedShapelets;
     protected int seriesId;
     protected int startPos;
     protected double splitThreshold;
     protected double informationGain;
     protected double separationGap;
 
-    public Shapelet(double[] content, int seriesId, int startPos) {
+    protected Shapelet(double[] content, int seriesId, int startPos) {
         this.content = content;
         this.seriesId = seriesId;
         this.startPos = startPos;
     }
 
+    protected Shapelet(double[][] content, double informationGain){
+        this.contentInMergedShapelets = content;
+        this.informationGain = informationGain;
+    }
     // TEMPORARY - for testing
-    public Shapelet(double[] content, int seriesId, int startPos, double splitThreshold,
+    protected Shapelet(double[] content, int seriesId, int startPos, double splitThreshold,
                      double gain, double gap) {
         this.content = content;
         this.seriesId = seriesId;
