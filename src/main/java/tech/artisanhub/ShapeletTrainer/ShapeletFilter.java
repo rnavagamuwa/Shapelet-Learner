@@ -576,6 +576,8 @@ public class ShapeletFilter {
         private double splitThreshold;
         private double informationGain;
         private double separationGap;
+        private double ClassValProb;
+        private int classVal ;
 
         private Shapelet(double[] content, int seriesId, int startPos) {
             this.content = content;
@@ -600,6 +602,10 @@ public class ShapeletFilter {
             this.content = content;
         }
 
+        public Shapelet(Double[] minDiffs) {
+
+        }
+
     /*
      * note: we calculate the threshold as this is used for finding the best split point in the data
      * however, as this implementation of shapelets is as a filter, we do not actually use the
@@ -622,6 +628,8 @@ public class ShapeletFilter {
             // for example, if all
 
             for (int i = 1; i < orderline.size(); i++) {
+
+                // getting the distance of the ith shapelets from sorted shaplets.
                 thisDist = orderline.get(i).distance;
                 if (i == 1 || thisDist != lastDist) { // check that threshold has moved(no point in sampling
                     // identical thresholds)- special case - if 0 and 1
@@ -765,11 +773,35 @@ public class ShapeletFilter {
         }
     }
 
+    private static class ShapeletBucket{
+
+        private Set<Shapelet> shapletSet ;
+        private int classValue ;
+
+        private ShapeletBucket (int value){
+            this.classValue = value;
+        }
+
+        private void put(Shapelet shapelet){
+
+            this.shapletSet.add(shapelet);
+        }
+
+        private int getClassValue(){
+            return this.classValue;
+        }
+
+        private Set<Shapelet> getShapeletSet(){
+            return this.shapletSet;
+        }
+    }
+
     // /**
     // *
     // * @param args
     // * @throws Exception
     // */
+
     // public static void main(String[] args) throws Exception{
     // ShapeletFilter sf = new ShapeletFilter(10, 5, 5);
     // Instances data = loadData("example.arff");
@@ -820,4 +852,66 @@ public class ShapeletFilter {
         return sf;
     }
 
+    public ArrayList<Shapelet> GetImportantShapelets(ArrayList<Shapelet> shapelets,Double[] dataSet, int [] classValues ){
+        ArrayList<Shapelet> shapeletsArr = new ArrayList<Shapelet>();
+        ArrayList<Double> classValProbs = new ArrayList<Double>();
+        Map<Integer,ShapeletBucket> shapeletBucket = null;
+
+        for (int i=0 ; i < classValues.length;i++) {
+            ShapeletBucket temp = new ShapeletBucket(classValues[i]);
+            classValProbs.add(findProb(dataSet,classValues[i]));
+            shapeletBucket.put(classValues[i],temp);
+            //remember Above can be optimized.
+        }
+        for (Shapelet s : shapelets){
+            int clas = MaxProbClassVal(s);
+            // above method has to be changed and for that attributes
+            // of shapelets also has to be changed.
+
+            shapeletBucket.get(clas).put(s);
+        }
+        Double [][] differences = new Double[classValues.length][10];
+        Double [] minDifs = new Double[classValues.length];
+
+        for(int clas : classValues){
+            for(Shapelet s : shapeletBucket.get(clas).getShapeletSet()){
+                differences[clas][s.seriesId] = Math.abs(s.classVal-classValProbs.get(clas));
+                // this has to be changed. The above is wrong.
+            }
+            minDifs[clas] = GetMinDif(differences[clas],clas);
+            //algorithm is wrong. need to change
+            Shapelet newShape = GetMinDifShape(minDifs);
+            // Have to change this heavily.
+            shapeletsArr.add(newShape);
+        }
+
+
+        return shapeletsArr;
+
+    }
+
+    private Shapelet GetMinDifShape(Double[] minDiffs){
+        Shapelet shapelet = new Shapelet(minDiffs);
+
+        return shapelet;
+    }
+    private Double GetMinDif(Double[] diff,int classVal){
+        Double Mindif = 0.0;
+
+        return Mindif;
+    }
+    private int MaxProbClassVal(Shapelet shaplet){
+        int classVal = 0;
+        return classVal ;
+    }
+    private double findProb(Double[] data, int classVal) {
+        int count = 0;
+        for(int i=0;i<data.length;i++){
+            if(Integer.parseInt(data[i].toString()) == classVal ){
+                count ++;
+            }
+        }
+
+        return count/data.length;
+    }
 }
