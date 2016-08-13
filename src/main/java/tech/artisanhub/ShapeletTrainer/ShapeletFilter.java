@@ -772,36 +772,33 @@ public class ShapeletFilter {
             this.classVal = classVal;
         }
     }
-
     private static class ShapeletBucket{
 
-        private Set<Shapelet> shapletSet ;
-        private int classValue ;
+            private Set<Shapelet> shapletSet ;
+            private int classValue ;
 
-        private ShapeletBucket (int value){
-            this.classValue = value;
+            private ShapeletBucket (int value){
+                this.classValue = value;
+            }
+
+            private void put(Shapelet shapelet){
+
+                this.shapletSet.add(shapelet);
+            }
+
+            private int getClassValue(){
+                return this.classValue;
+            }
+
+            private Set<Shapelet> getShapeletSet(){
+                return this.shapletSet;
+            }
         }
-
-        private void put(Shapelet shapelet){
-
-            this.shapletSet.add(shapelet);
-        }
-
-        private int getClassValue(){
-            return this.classValue;
-        }
-
-        private Set<Shapelet> getShapeletSet(){
-            return this.shapletSet;
-        }
-    }
-
     // /**
     // *
     // * @param args
     // * @throws Exception
     // */
-
     // public static void main(String[] args) throws Exception{
     // ShapeletFilter sf = new ShapeletFilter(10, 5, 5);
     // Instances data = loadData("example.arff");
