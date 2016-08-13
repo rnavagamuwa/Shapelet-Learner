@@ -14,18 +14,19 @@ public class LearnShapelets
             // additional information: log output dir
 
             // example filter, k = 10, minLength = 20, maxLength = 40, data = , output = exampleOutput.txt
+            int k = 15; // number of shapelets
 
-            int k = 15;
-            int minLength = 2;
-            int maxLength = 8;
+            int minLength = 1;
+            int maxLength = 4;
+            String salihPath = "home/jawadhsr/Desktop/FYP/FIles/iris_replacedNamedWithInts.data";
             String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/arff-pima-indians-diabetes.data";
-            Instances data = ShapeletFilter.loadData(ARFFName);
+            Instances data = ShapeletFilter.loadData(salihPath);
 
-            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/shapelets_out.txt";
+            String salihOuputPath =  "home/jawadhsr/Desktop/FYP/FIles/Shaplets.txt";
+            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/shapeletsOut.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
-            sf.setLogOutputFile(outPutFile); // log file stores shapelet output
-            ArrayList<Shapelet> generatedShapelets = sf.process(data);
-
+            sf.setLogOutputFile(salihOuputPath); // log file stores shapelet output
+            Instances transformed = sf.process(data);
         }
         catch (Exception e) {
             e.printStackTrace();
