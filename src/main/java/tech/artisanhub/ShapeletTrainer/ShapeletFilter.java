@@ -191,6 +191,7 @@ public class ShapeletFilter {
                                                         int minShapeletLength, int maxShapeletLength) throws Exception {
 
         long startTime = System.nanoTime();
+        double[] rawContent;
 
         ArrayList<Shapelet> kShapelets = new ArrayList<Shapelet>(); // store (upto) the best k shapelets
         // overall
@@ -231,13 +232,16 @@ public class ShapeletFilter {
                     // CANDIDATE ESTABLISHED - got original series, length and starting position
                     // extract relevant part into a double[] for processing
                     double[] candidate = new double[length];
+                    rawContent = new double[length +1];
                     for (int m = start; m < start + length; m++) {
                         candidate[m - start] = wholeCandidate[m];
+                        rawContent[m - start] = wholeCandidate[m];
                     }
 
                     // znorm candidate here so it's only done once, rather than in each distance calculation
+                    rawContent[length] = data.instance(i).classValue();
                     candidate = zNorm(candidate, false);
-                    Shapelet candidateShapelet = checkCandidate(candidate, data, i, start, classDistributions);
+                    Shapelet candidateShapelet = checkCandidate(candidate, data, i, start, classDistributions,rawContent);
                     seriesShapelets.add(candidateShapelet);
                 }
             }
@@ -254,10 +258,18 @@ public class ShapeletFilter {
             for (int i = 0; i < kShapelets.size(); i++) {
                 out.append(kShapelets.get(i).informationGain + "," + kShapelets.get(i).seriesId + ","
                         + kShapelets.get(i).startPos + "\n");
+                /*Uncomment this code block to write information gain to the file */
+//                double[] shapeletContent = kShapelets.get(i).content;
+//
+//                for (int j = 0; j < shapeletContent.length; j++) {
+//                    out.append(shapeletContent[j] + ",");
+//                }
 
-                double[] shapeletContent = kShapelets.get(i).content;
-                for (int j = 0; j < shapeletContent.length; j++) {
-                    out.append(shapeletContent[j] + ",");
+                /*Uncomment this code block to write raw content of the shapelet to the file */
+                double[] shapeletRawContent = kShapelets.get(i).rawContent;
+
+                for (int j = 0; j < shapeletRawContent.length; j++) {
+                    out.append(shapeletRawContent[j] + ",");
                 }
                 out.append("\n");
             }
@@ -384,7 +396,7 @@ public class ShapeletFilter {
      * @return a TreeMap<Double, Integer> in the form of <Class Value, Frequency>
      */
     private static Shapelet checkCandidate(double[] candidate, Instances data, int seriesId,
-                                           int startPos, TreeMap classDistribution) {
+                                           int startPos, TreeMap classDistribution,double[] rawContent) {
 
         // create orderline by looping through data set and calculating the subsequence
         // distance from candidate to all data, inserting in order.
@@ -402,6 +414,7 @@ public class ShapeletFilter {
         // create a shapelet object to store all necessary info, i.e.
         // content, seriesId, then calc info gain, plit threshold and separation gap
         Shapelet shapelet = new Shapelet(candidate, seriesId, startPos);
+        shapelet.rawContent = rawContent;
         shapelet.calcInfoGainAndThreshold(orderline, classDistribution);
 
         // note: early abandon entropy pruning would appear here, but has been ommitted

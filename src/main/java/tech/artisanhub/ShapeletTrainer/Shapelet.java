@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public  class Shapelet implements Comparable<Shapelet> {
+    protected double[] rawContent;
     protected double[] content;
     protected double[][] contentInMergedShapelets;
     protected int seriesId;
