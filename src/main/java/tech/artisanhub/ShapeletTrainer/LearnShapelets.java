@@ -18,11 +18,11 @@ public class LearnShapelets
 
             int minLength = 1;
             int maxLength = 4;
-            String salihPath = "home/jawadhsr/Desktop/FYP/FIles/iris_replacedNamedWithInts.data";
+            //String salihPath = "/home/jawadhsr/Desktop/FYP/FIles/iris_replacedNamedWithInts.arff";
             String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/arff-pima-indians-diabetes.data";
             Instances data = ShapeletFilter.loadData(ARFFName);
 
-            String salihOuputPath =  "home/jawadhsr/Desktop/FYP/FIles/Shaplets.txt";
+            //tring salihOuputPath =  "/home/jawadhsr/Desktop/FYP/FIles/Shaplets.txt";
             String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/shapeletsOut.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
