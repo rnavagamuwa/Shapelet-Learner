@@ -26,7 +26,7 @@ public class LearnShapelets
             String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/shapeletsOut.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
-            Instances transformed = sf.process(data);
+            ArrayList<Shapelet> generatedShapelets = sf.process(data);
         }
         catch (Exception e) {
             e.printStackTrace();
