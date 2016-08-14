@@ -20,13 +20,13 @@ public class LearnShapelets
             int maxLength = 4;
             String salihPath = "home/jawadhsr/Desktop/FYP/FIles/iris_replacedNamedWithInts.data";
             String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/arff-pima-indians-diabetes.data";
-            Instances data = ShapeletFilter.loadData(salihPath);
+            Instances data = ShapeletFilter.loadData(ARFFName);
 
             String salihOuputPath =  "home/jawadhsr/Desktop/FYP/FIles/Shaplets.txt";
             String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/shapeletsOut.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
-            sf.setLogOutputFile(salihOuputPath); // log file stores shapelet output
-            ArrayList<ShapeletFilter.Shapelet> transformed = sf.process(data);
+            sf.setLogOutputFile(outPutFile); // log file stores shapelet output
+            Instances transformed = sf.process(data);
         }
         catch (Exception e) {
             e.printStackTrace();
