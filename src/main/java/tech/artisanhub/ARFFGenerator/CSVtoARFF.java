@@ -19,7 +19,7 @@ public class CSVtoARFF {
         String salihPath = "/home/jawadhsr/Desktop/FYP/FIles/iris_replacedNamedWithInts.csv";
         // load CSV
         CSVLoader loader = new CSVLoader();
-        loader.setSource(new File(salihPath));
+        loader.setSource(new File(TRAINING_DATA));
         Instances data = loader.getDataSet();
         System.out.println("Source CSV has been successfully loaded");
 
@@ -27,8 +27,8 @@ public class CSVtoARFF {
         // save ARFF
         ArffSaver saver = new ArffSaver();
         saver.setInstances(data);
-        saver.setFile(new File(salihOutput));
-        saver.setDestination(new File(salihOutput));
+        saver.setFile(new File(OUTPUT_DATA));
+        saver.setDestination(new File(OUTPUT_DATA));
         saver.writeBatch();
         System.out.println("ARFF has been successfully generated");
 
