@@ -13,7 +13,6 @@ public  class Shapelet implements Comparable<Shapelet> {
     protected double splitThreshold;
     protected double informationGain;
     protected double separationGap;
-    protected double classVal;
 
 
     protected Shapelet(double[] content, int seriesId, int startPos) {
