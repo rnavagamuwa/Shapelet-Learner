@@ -191,7 +191,7 @@ public class ShapeletFilter {
                                                         int minShapeletLength, int maxShapeletLength) throws Exception {
 
         long startTime = System.nanoTime();
-        double[] rawContent;
+        Double[] rawContent;
 
         ArrayList<Shapelet> kShapelets = new ArrayList<Shapelet>(); // store (upto) the best k shapelets
         // overall
@@ -232,7 +232,7 @@ public class ShapeletFilter {
                     // CANDIDATE ESTABLISHED - got original series, length and starting position
                     // extract relevant part into a double[] for processing
                     double[] candidate = new double[length];
-                    rawContent = new double[length +1];
+                    rawContent = new Double[length +1];
                     for (int m = start; m < start + length; m++) {
                         candidate[m - start] = wholeCandidate[m];
                         rawContent[m - start] = wholeCandidate[m];
@@ -266,7 +266,7 @@ public class ShapeletFilter {
 //                }
 
                 /*Uncomment this code block to write raw content of the shapelet to the file */
-                double[] shapeletRawContent = kShapelets.get(i).rawContent;
+                Double[] shapeletRawContent = kShapelets.get(i).rawContent;
 
                 for (int j = 0; j < shapeletRawContent.length; j++) {
                     out.append(shapeletRawContent[j] + ",");
@@ -396,7 +396,7 @@ public class ShapeletFilter {
      * @return a TreeMap<Double, Integer> in the form of <Class Value, Frequency>
      */
     private static Shapelet checkCandidate(double[] candidate, Instances data, int seriesId,
-                                           int startPos, TreeMap classDistribution,double[] rawContent) {
+                                           int startPos, TreeMap classDistribution,Double[] rawContent) {
 
         // create orderline by looping through data set and calculating the subsequence
         // distance from candidate to all data, inserting in order.
