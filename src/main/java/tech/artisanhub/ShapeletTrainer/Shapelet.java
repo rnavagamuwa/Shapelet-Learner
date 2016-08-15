@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public  class Shapelet implements Comparable<Shapelet> {
-    protected double[] rawContent;
+    protected Double[] rawContent;
     protected double[] content;
-    protected double[][] contentInMergedShapelets;
+    protected ArrayList<ArrayList<Double>> contentInMergedShapelets;
     protected int seriesId;
     protected int startPos;
     protected double splitThreshold;
@@ -21,9 +21,8 @@ public  class Shapelet implements Comparable<Shapelet> {
         this.startPos = startPos;
     }
 
-    protected Shapelet(double[][] content, double informationGain){
+    protected Shapelet(ArrayList<ArrayList<Double>> content){
         this.contentInMergedShapelets = content;
-        this.informationGain = informationGain;
     }
     // TEMPORARY - for testing
     protected Shapelet(double[] content, int seriesId, int startPos, double splitThreshold,
