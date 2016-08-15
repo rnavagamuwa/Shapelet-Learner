@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MergeShapelets {
-   public ArrayList<Shapelet> mergeShapelets(ArrayList<Shapelet> shapelets,int requiredClassSize){
 
+   public ArrayList<Shapelet> mergeShapelets(ArrayList<Shapelet> shapelets,int requiredClassSize){
 
        int noOfShapeletsToMerge = shapelets.size();
        double minInfoGain = shapelets.get(noOfShapeletsToMerge-1).informationGain;
@@ -27,10 +27,10 @@ public class MergeShapelets {
 
        while (iterator.hasNext()){
            currentShapelet = iterator.next();
-           if (minInfoGain<currentShapelet.informationGain && shapeletSize == currentShapelet.content.length){
-               count ++;
-               content[0] = currentShapelet.content;
+           if (minInfoGain<currentShapelet.informationGain){
+               content[count] = currentShapelet.rawContent;
                currentInformationGain += currentShapelet.informationGain;
+               count ++;
            }else if (minInfoGain>=currentShapelet.informationGain){
                minInfoGain +=threshold;
                mergedShapeletsOut.add(new Shapelet(content,currentInformationGain/count));
