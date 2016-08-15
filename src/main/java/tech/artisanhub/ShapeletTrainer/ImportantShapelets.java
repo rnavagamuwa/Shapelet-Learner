@@ -1,10 +1,8 @@
 package tech.artisanhub.ShapeletTrainer;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by jawadhsr on 8/14/16.
@@ -22,24 +20,28 @@ public class ImportantShapelets {
             shapeletBucket.put(classValues[i], temp);
             //remember Above can be optimized.
         }
+        Map<Integer,Double> clasNprob = null;
         for (Shapelet s : shapelets) {
-            int clas = MaxProbClassVal(s);
+            clasNprob = MaxProbClassVal(s);
             // above method has to be changed and for that attributes
             // of shapelets also has to be changed.
-
+            Integer clas = Integer.parseInt(clasNprob.keySet().toArray()[0].toString());
             shapeletBucket.get(clas).put(s);
         }
         Double[][] differences = new Double[classValues.length][10];
         Double[] minDifs = new Double[classValues.length];
-
+        Map <Integer,Map<Shapelet,Double>> shapeDiff = null;
         for (int clas : classValues) {
+            Map<Shapelet,Double> temp = null;
             for (Shapelet s : shapeletBucket.get(clas).getShapeletSet()) {
-                differences[clas][s.seriesId] = Math.abs(/*Here the prob(class Val) of shapelt has to be included. */-classValProbs.get(clas));
+                temp.put(s,clasNprob.get(clas) - classValProbs.get(clas));
+                //differences[clas][s.seriesId] = Math.abs(/*Here the prob(class Val) of shapelt has to be included. */-classValProbs.get(clas));
                 // this has to be changed. The above is wrong.
             }
-            minDifs[clas] = GetMinDif(differences[clas], clas);
-            //algorithm is wrong. need to change
-            Shapelet newShape = GetMinDifShape(minDifs);
+            shapeDiff.put(clas,temp);
+
+            // Done. Now Test the values.
+            Shapelet newShape = GetMinDifShape(shapeDiff.get(clas));
             // Have to change this heavily.
             shapeletsArr.add(newShape);
         }
@@ -49,8 +51,15 @@ public class ImportantShapelets {
 
     }
 
-    private Shapelet GetMinDifShape(Double[] minDiffs) {
+    private Shapelet GetMinDifShape(Map<Shapelet,Double> shapeDiffs) {
         Shapelet shapelet = null; // = new Shapelet(minDiffs);
+        Double minVal = Double.MAX_VALUE;
+        for(Map.Entry<Shapelet,Double> sd : shapeDiffs.entrySet()){
+            if(minVal > sd.getValue()){
+                minVal = sd.getValue();
+                shapelet = sd.getKey();
+            }
+        }
 
         return shapelet;
     }
@@ -67,10 +76,10 @@ public class ImportantShapelets {
         return Mindif;
     }
 
-    private int MaxProbClassVal(Shapelet shaplet) {
+    private Map<Integer,Double> MaxProbClassVal(Shapelet shaplet) {
         double[][] shapeContent = shaplet.contentInMergedShapelets;
         double [] tempArr = shapeContent[shapeContent.length];
-
+        Map <Integer,Double> retValue = null;
         Arrays.sort(tempArr);
         Map <Double,Integer> classValCount = null;
 
@@ -92,8 +101,9 @@ public class ImportantShapelets {
                 MaxKey = val.getKey();
             }
        }
-
-        return MaxKey.intValue();
+        Double maxProb = MaxVal*1.0/tempArr.length;
+        retValue.put(MaxKey.intValue(),maxProb);
+        return retValue;
     }
 
     private double findProb(Double[] data, int classVal) {
