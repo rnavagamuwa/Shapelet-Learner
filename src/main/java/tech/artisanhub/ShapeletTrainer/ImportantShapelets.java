@@ -1,7 +1,10 @@
 package tech.artisanhub.ShapeletTrainer;
 
+import weka.core.Instances;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -9,10 +12,10 @@ import java.util.Map;
  */
 public class ImportantShapelets {
 
-    public ArrayList<Shapelet> GetImportantShapelets(ArrayList<Shapelet> shapelets, Double[] dataSet, int[] classValues) {
+    public ArrayList<Shapelet> GetImportantShapelets(ArrayList<Shapelet> shapelets, Instances dataSet, int[] classValues) {
         ArrayList<Shapelet> shapeletsArr = new ArrayList<Shapelet>();
         ArrayList<Double> classValProbs = new ArrayList<Double>();
-        Map<Integer, ShapeletBucket> shapeletBucket = null;
+        Map<Integer, ShapeletBucket> shapeletBucket = new HashMap<Integer, ShapeletBucket>();
 
         for (int i = 0; i < classValues.length; i++) {
             ShapeletBucket temp = new ShapeletBucket(classValues[i]);
@@ -20,7 +23,7 @@ public class ImportantShapelets {
             shapeletBucket.put(classValues[i], temp);
             //remember Above can be optimized.
         }
-        Map<Integer,Double> clasNprob = null;
+        Map<Integer,Double> clasNprob = new HashMap<Integer, Double>();
         for (Shapelet s : shapelets) {
             clasNprob = MaxProbClassVal(s);
             // above method has to be changed and for that attributes
@@ -30,9 +33,9 @@ public class ImportantShapelets {
         }
         Double[][] differences = new Double[classValues.length][10];
         Double[] minDifs = new Double[classValues.length];
-        Map <Integer,Map<Shapelet,Double>> shapeDiff = null;
+        Map <Integer,Map<Shapelet,Double>> shapeDiff = new HashMap<Integer, Map<Shapelet, Double>>();
         for (int clas : classValues) {
-            Map<Shapelet,Double> temp = null;
+            Map<Shapelet,Double> temp = new HashMap<Shapelet, Double>();
             for (Shapelet s : shapeletBucket.get(clas).getShapeletSet()) {
                 temp.put(s,clasNprob.get(clas) - classValProbs.get(clas));
                 //differences[clas][s.seriesId] = Math.abs(/*Here the prob(class Val) of shapelt has to be included. */-classValProbs.get(clas));
@@ -78,10 +81,16 @@ public class ImportantShapelets {
 
     private Map<Integer,Double> MaxProbClassVal(Shapelet shaplet) {
         double[][] shapeContent = shaplet.contentInMergedShapelets;
-        double [] tempArr = shapeContent[shapeContent.length];
-        Map <Integer,Double> retValue = null;
+        double [] tempArr = new double[shapeContent.length];
+        int count = 0;
+        for(double[] val : shapeContent){
+            tempArr[count] = val[val.length-1];
+            count ++;
+        }
+
+        Map <Integer,Double> retValue = new HashMap<Integer, Double>();
         Arrays.sort(tempArr);
-        Map <Double,Integer> classValCount = null;
+        Map <Double,Integer> classValCount = new HashMap<Double, Integer>();
 
         for(int i=0;i<tempArr.length;i++){
            if(classValCount.containsKey(tempArr[i])){
@@ -106,15 +115,15 @@ public class ImportantShapelets {
         return retValue;
     }
 
-    private double findProb(Double[] data, int classVal) {
+    private double findProb(Instances data, int classVal) {
         int count = 0;
-        for (int i = 0; i < data.length; i++) {
-            if (Integer.parseInt(data[i].toString()) == classVal) {
+        for (int i = 0; i < data.size(); i++) {
+            if ((int)(data.get(i).classValue()) == classVal) {
                 count++;
             }
         }
 
-        return count / data.length;
+        return count / data.size();
 
     }
 
