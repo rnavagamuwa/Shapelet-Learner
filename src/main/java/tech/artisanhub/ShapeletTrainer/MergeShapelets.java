@@ -6,9 +6,6 @@ import java.util.Iterator;
 
 public class MergeShapelets {
 
-
-   /*class value isn't considering here. That should be added also. Without the class value salih can't do his work */
-
    public ArrayList<Shapelet> mergeShapelets(ArrayList<Shapelet> shapelets,int requiredClassSize){
 
        int noOfShapeletsToMerge = shapelets.size();
