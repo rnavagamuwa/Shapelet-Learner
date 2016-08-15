@@ -14,6 +14,7 @@ public  class Shapelet implements Comparable<Shapelet> {
     protected double informationGain;
     protected double separationGap;
 
+
     protected Shapelet(double[] content, int seriesId, int startPos) {
         this.content = content;
         this.seriesId = seriesId;
