@@ -3,7 +3,6 @@ package tech.artisanhub.ShapeletTrainer;
 import weka.core.Instances;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,19 +24,22 @@ public class ImportantShapelets {
         }
         Map<Integer,Double> clasNprob = new HashMap<Integer, Double>();
         for (Shapelet s : shapelets) {
-            clasNprob = MaxProbClassVal(s);
+            for(Integer val : MaxProbClassVal(s).keySet()){
+                clasNprob.put(val,MaxProbClassVal(s).get(val));
+            }
+
             // above method has to be changed and for that attributes
             // of shapelets also has to be changed.
             Integer clas = Integer.parseInt(clasNprob.keySet().toArray()[0].toString());
             shapeletBucket.get(clas).put(s);
         }
-        Double[][] differences = new Double[classValues.length][10];
-        Double[] minDifs = new Double[classValues.length];
         Map <Integer,Map<Shapelet,Double>> shapeDiff = new HashMap<Integer, Map<Shapelet, Double>>();
         for (int clas : classValues) {
             Map<Shapelet,Double> temp = new HashMap<Shapelet, Double>();
             for (Shapelet s : shapeletBucket.get(clas).getShapeletSet()) {
-                temp.put(s,clasNprob.get(clas) - classValProbs.get(clas));
+                //temp.put(s,0.4);
+                double val = clasNprob.get(clas);
+                temp.put(s, val- classValProbs.get(clas));
                 //differences[clas][s.seriesId] = Math.abs(/*Here the prob(class Val) of shapelt has to be included. */-classValProbs.get(clas));
                 // this has to be changed. The above is wrong.
             }
@@ -80,26 +82,26 @@ public class ImportantShapelets {
     }
 
     private Map<Integer,Double> MaxProbClassVal(Shapelet shaplet) {
-        double[][] shapeContent = shaplet.contentInMergedShapelets;
-        double [] tempArr = new double[shapeContent.length];
+       ArrayList<ArrayList<Double>> shapeContent = shaplet.contentInMergedShapelets;
+        ArrayList<Double> tempArr = new ArrayList<Double>();
         int count = 0;
-        for(double[] val : shapeContent){
-            tempArr[count] = val[val.length-1];
+        for(ArrayList<Double> val : shapeContent){
+            tempArr.add(count,val.get(val.size()-1));
             count ++;
         }
 
         Map <Integer,Double> retValue = new HashMap<Integer, Double>();
-        Arrays.sort(tempArr);
+        //Arrays.sort(tempArr);
         Map <Double,Integer> classValCount = new HashMap<Double, Integer>();
 
-        for(int i=0;i<tempArr.length;i++){
-           if(classValCount.containsKey(tempArr[i])){
-               Integer val = classValCount.get(tempArr[i]);
+        for(int i=0;i<tempArr.size();i++){
+           if(classValCount.containsKey(tempArr.get(i))){
+               Integer val = classValCount.get(tempArr.get(i));
                val ++;
-               classValCount.put(tempArr[i],val);
+               classValCount.put(tempArr.get(i),val);
            }
             else {
-               classValCount.put(tempArr[i],1);
+               classValCount.put(tempArr.get(i),1);
            }
         }
         int MaxVal = 0;
@@ -110,7 +112,7 @@ public class ImportantShapelets {
                 MaxKey = val.getKey();
             }
        }
-        Double maxProb = MaxVal*1.0/tempArr.length;
+        Double maxProb = MaxVal*1.0/tempArr.size();
         retValue.put(MaxKey.intValue(),maxProb);
         return retValue;
     }

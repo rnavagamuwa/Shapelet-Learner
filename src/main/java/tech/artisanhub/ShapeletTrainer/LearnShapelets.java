@@ -18,22 +18,21 @@ public class LearnShapelets
 
             int minLength = 1;
             int maxLength = 4;
-//            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/iris_replacedNamedWithInts.arff";
-            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/arff-pima-indians-diabetes.data";
+            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/iris_replacedNamedWithInts.arff";
+//            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/arff-pima-indians-diabetes.data";
             Instances data = ShapeletFilter.loadData(ARFFName);
 
-//            String outPutFile =  "/home/jawadhsr/Desktop/FYP/FIles/Shaplets.txt";
-            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/shapeletsOut.txt";
+            String outPutFile =  "/home/jawadhsr/Desktop/FYP/FIles/Shaplets.txt";
+//            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/pima-indians-diabetes/shapeletsOut.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
             ArrayList<Shapelet> generatedShapelets = sf.process(data);
             int [] arr = {1,2,3};
             ArrayList<Shapelet> outPut = new ImportantShapelets().GetImportantShapelets(new MergeShapelets().mergeShapelets(generatedShapelets,5),data,arr);
-            int i=0;
-            for(Shapelet val : outPut){
-                System.out.println(outPut.get(i).contentInMergedShapelets);
-                i++;
-            }
+            System.out.println(outPut.size());
+//            for(Shapelet val : outPut){
+//                System.out.println(val.contentInMergedShapelets);
+//            }
         }
         catch (Exception e) {
             e.printStackTrace();
