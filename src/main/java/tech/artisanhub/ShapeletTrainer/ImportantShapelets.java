@@ -39,7 +39,7 @@ public class ImportantShapelets {
             for (Shapelet s : shapeletBucket.get(clas).getShapeletSet()) {
                 //temp.put(s,0.4);
                 double val = clasNprob.get(clas);
-                temp.put(s, val- classValProbs.get(clas));
+                temp.put(s, val - classValProbs.get(clas));
                 //differences[clas][s.seriesId] = Math.abs(/*Here the prob(class Val) of shapelt has to be included. */-classValProbs.get(clas));
                 // this has to be changed. The above is wrong.
             }
