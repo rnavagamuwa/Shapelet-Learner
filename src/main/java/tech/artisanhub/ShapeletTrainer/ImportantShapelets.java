@@ -18,10 +18,13 @@ public class ImportantShapelets {
 
         for (int i = 0; i < classValues.length; i++) {
             ShapeletBucket temp = new ShapeletBucket(classValues[i]);
+
             classValProbs.add(findProb(dataSet, classValues[i]));
             shapeletBucket.put(classValues[i], temp);
             //remember Above can be optimized.
         }
+        System.out.println(classValues.length);
+        System.out.println(shapeletBucket.size());
         Map<Integer,Double> clasNprob = new HashMap<Integer, Double>();
         for (Shapelet s : shapelets) {
             for(Integer val : MaxProbClassVal(s).keySet()){
@@ -125,7 +128,9 @@ public class ImportantShapelets {
             }
         }
 
-        return count / data.size();
+        double var =  count*1.0/data.size();
+        System.out.println("Probability of the classvalue "+classVal+" is "+ var );
+        return var;
 
     }
 

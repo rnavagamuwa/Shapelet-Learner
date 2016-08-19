@@ -145,7 +145,7 @@ public class ShapeletFilter {
             throw new Exception("Shapelet length parameters initialised incorrectly");
         }
 
-        if (this.shapeletsTrained == false) { // shapelets discovery has not yet been caried out, so do
+        if (this.shapeletsTrained == false) { // shapelets discovery has not yet been carried out, so do
             // so
             this.shapelets = findBestKShapeletsCache(this.numShapelets, data, this.minShapeletLength,
                     this.maxShapeletLength); // get k shapelets ATTENTION
