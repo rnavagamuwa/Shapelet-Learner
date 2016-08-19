@@ -1,5 +1,6 @@
 package tech.artisanhub.ShapeletTrainer;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -11,6 +12,8 @@ public class ShapeletBucket{
     private int classValue ;
 
     ShapeletBucket(int value){
+
+        shapletSet = new HashSet<Shapelet>();
         this.classValue = value;
     }
 
