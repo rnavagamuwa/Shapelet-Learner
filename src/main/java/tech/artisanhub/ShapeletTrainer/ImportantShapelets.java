@@ -72,17 +72,6 @@ public class ImportantShapelets {
         return shapelet;
     }
 
-    private Double GetMinDif(Double[] diff, int classVal) {
-        Double Mindif = Double.MAX_VALUE;
-
-        for (int i = 0; i < diff.length; i++) {
-            if (Mindif > diff[i]) {
-                Mindif = diff[i];
-            }
-        }
-
-        return Mindif;
-    }
 
     private Map<Integer,Double> MaxProbClassVal(Shapelet shaplet) {
        ArrayList<ArrayList<Double>> shapeContent = shaplet.contentInMergedShapelets;
@@ -123,7 +112,7 @@ public class ImportantShapelets {
     private double findProb(Instances data, int classVal) {
         int count = 0;
         for (int i = 0; i < data.size(); i++) {
-            if ((int)(data.get(i).classValue()) == classVal) {
+            if (Integer.parseInt(data.get(i).attribute(data.get(i).numAttributes()-3).toString()) == classVal) {
                 count++;
             }
         }
