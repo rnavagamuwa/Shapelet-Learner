@@ -11,19 +11,19 @@ import java.util.Map;
  */
 public class ImportantShapelets {
 
-    public ArrayList<Shapelet> GetImportantShapelets(ArrayList<Shapelet> shapelets, Instances dataSet, int[] classValues) {
+    public ArrayList<Shapelet> GetImportantShapelets(ArrayList<Shapelet> shapelets, Instances dataSet,ArrayList<Integer> classValues) {
         ArrayList<Shapelet> shapeletsArr = new ArrayList<Shapelet>();
         ArrayList<Double> classValProbs = new ArrayList<Double>();
         Map<Integer, ShapeletBucket> shapeletBucket = new HashMap<Integer, ShapeletBucket>();
 
-        for (int i = 0; i < classValues.length; i++) {
-            ShapeletBucket temp = new ShapeletBucket(classValues[i]);
+        for (int i = 0; i < classValues.size(); i++) {
+            ShapeletBucket temp = new ShapeletBucket(classValues.get(i));
 
-            classValProbs.add(findProb(dataSet, classValues[i]));
-            shapeletBucket.put(classValues[i], temp);
+            classValProbs.add(findProb(dataSet, classValues.get(i)));
+            shapeletBucket.put(classValues.get(i), temp);
             //remember Above can be optimized.
         }
-        System.out.println(classValues.length);
+        System.out.println(classValues.size());
         System.out.println(shapeletBucket.size());
         Map<Integer,Double> clasNprob = new HashMap<Integer, Double>();
         for (Shapelet s : shapelets) {
@@ -72,17 +72,7 @@ public class ImportantShapelets {
         return shapelet;
     }
 
-    private Double GetMinDif(Double[] diff, int classVal) {
-        Double Mindif = Double.MAX_VALUE;
 
-        for (int i = 0; i < diff.length; i++) {
-            if (Mindif > diff[i]) {
-                Mindif = diff[i];
-            }
-        }
-
-        return Mindif;
-    }
 
     private Map<Integer,Double> MaxProbClassVal(Shapelet shaplet) {
        ArrayList<ArrayList<Double>> shapeContent = shaplet.contentInMergedShapelets;

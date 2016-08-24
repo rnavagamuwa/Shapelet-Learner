@@ -367,7 +367,7 @@ public class ShapeletFilter {
      * @param data the input data set that the class distributions are to be derived from
      * @return a TreeMap<Double, Integer> in the form of <Class Value, Frequency>
      */
-    private static TreeMap<Double, Integer> getClassDistributions(Instances data) {
+    public static TreeMap<Double, Integer> getClassDistributions(Instances data) {
         TreeMap<Double, Integer> classDistribution = new TreeMap<Double, Integer>();
         double classValue;
         for (int i = 0; i < data.numInstances(); i++) {

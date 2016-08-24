@@ -8,6 +8,7 @@ import tech.artisanhub.Visualizer.XYLineChart_AWT;
 import weka.core.Instances;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class LearnShapelets
 {
@@ -32,7 +33,11 @@ public class LearnShapelets
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
             ArrayList<Shapelet> generatedShapelets = sf.process(data);
-            int [] arr = {1,2,3};
+            Map<Double,Integer> classDist = ShapeletFilter.getClassDistributions(data);
+            ArrayList<Integer> arr = new ArrayList<Integer>();
+            for (double val: classDist.keySet()){
+                arr.add((int)val);
+            }
             ArrayList<Shapelet> outPut = new ImportantShapelets().GetImportantShapelets(new MergeShapelets().mergeShapelets(generatedShapelets,15),data,arr);
 
             for(Shapelet val : outPut){
