@@ -66,7 +66,7 @@ public class LearnShapelets
                         shapelets.add(currentSHapelet);
                     }
 
-                    XYLineChart_AWT chart = new XYLineChart_AWT("Shapelets stats", "Shapelets stats",createDataset(shapelets));
+                    XYLineChart_AWT chart = new XYLineChart_AWT("Shapelets stats", "Shapelets stats",createDataset(shapelets,data.get(1).numValues()-1));
                     chart.pack( );
                     RefineryUtilities.centerFrameOnScreen( chart );
                     chart.setVisible( true );
@@ -80,13 +80,13 @@ public class LearnShapelets
         }
     }
 
-    private static XYDataset createDataset(ArrayList<ArrayList<Double>> shapelets )
+    private static XYDataset createDataset(ArrayList<ArrayList<Double>> shapelets ,int rowSize)
     {
         XYSeriesCollection dataset = new XYSeriesCollection( );
 
         for (int i = 0; i < shapelets.size(); i++) {
             XYSeries series = series = new XYSeries(i);
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < rowSize; j++) {
                 double val = shapelets.get(i).get(j).doubleValue();
                 series.add(j,val);
             }
