@@ -17,12 +17,12 @@ public class LearnShapelets
             int k = Integer.MAX_VALUE; // number of shapelets
 
             int minLength = 2;
-            int maxLength = 3;
-            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/Air/air_3columns.arff";
+            int maxLength = 4;
+            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/IRIS/iris_replacedNamedWithInts.arff";
 //            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
             Instances data = ShapeletFilter.loadData(ARFFName);
 
-            String outPutFile =  "/home/jawadhsr/Desktop/FYP/FIles/Air/Shaplets.txt";
+            String outPutFile =  "/home/jawadhsr/Desktop/FYP/FIles/IRIS/Shaplets.txt";
 //            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
