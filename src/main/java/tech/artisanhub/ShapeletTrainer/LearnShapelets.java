@@ -1,5 +1,10 @@
 package tech.artisanhub.ShapeletTrainer;
 
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.RefineryUtilities;
+import tech.artisanhub.Visualizer.XYLineChart_AWT;
 import weka.core.Instances;
 
 import java.util.ArrayList;
@@ -18,12 +23,12 @@ public class LearnShapelets
 
             int minLength = 2;
             int maxLength = 4;
-            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/IRIS/iris_replacedNamedWithInts.arff";
-//            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
+//            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/IRIS/iris_replacedNamedWithInts.arff";
+            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
             Instances data = ShapeletFilter.loadData(ARFFName);
 
-            String outPutFile =  "/home/jawadhsr/Desktop/FYP/FIles/IRIS/Shaplets.txt";
-//            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
+//            String outPutFile =  "/home/jawadhsr/Desktop/FYP/FIles/IRIS/Shaplets.txt";
+            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
             ArrayList<Shapelet> generatedShapelets = sf.process(data);
@@ -60,7 +65,12 @@ public class LearnShapelets
                         }
                         shapelets.add(currentSHapelet);
                     }
-                    //plot graph for each event using shapelets 2d arraylist
+
+                    XYLineChart_AWT chart = new XYLineChart_AWT("Shapelets stats", "Shapelets stats",createDataset(shapelets,data.get(1).numValues()-1));
+                    chart.pack( );
+                    RefineryUtilities.centerFrameOnScreen( chart );
+                    chart.setVisible( true );
+
                     System.out.println(val.contentInMergedShapelets);
                 }
             }
@@ -68,5 +78,20 @@ public class LearnShapelets
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static XYDataset createDataset(ArrayList<ArrayList<Double>> shapelets ,int rowSize)
+    {
+        XYSeriesCollection dataset = new XYSeriesCollection( );
+
+        for (int i = 0; i < shapelets.size(); i++) {
+            XYSeries series = series = new XYSeries(i);
+            for (int j = 0; j < rowSize; j++) {
+                double val = shapelets.get(i).get(j).doubleValue();
+                series.add(j,val);
+            }
+            dataset.addSeries(series);
+        }
+        return dataset;
     }
 }
