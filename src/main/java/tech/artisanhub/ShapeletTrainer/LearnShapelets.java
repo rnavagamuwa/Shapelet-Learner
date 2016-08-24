@@ -30,11 +30,39 @@ public class LearnShapelets
             int [] arr = {1,2,3};
             ArrayList<Shapelet> outPut = new ImportantShapelets().GetImportantShapelets(new MergeShapelets().mergeShapelets(generatedShapelets,15),data,arr);
 
-            int i=0;
             for(Shapelet val : outPut){
                 if(val != null)
                  System.out.println(val.contentInMergedShapelets);
-                i++;
+            }
+
+            ArrayList<ArrayList<Double>> shapelets = new ArrayList<ArrayList<Double>>();
+            ArrayList<Double> currentSHapelet  = new ArrayList<Double>();
+
+            int size = 0;
+            int startPos =0;
+            int sizeOfTheShapelet = 0;
+            for(Shapelet val : outPut){
+                shapelets = new ArrayList<ArrayList<Double>>();
+                if(val != null) {
+                    sizeOfTheShapelet = val.contentInMergedShapelets.size();
+                    for (int i = 0; i < sizeOfTheShapelet; i++) {
+                        size = val.contentInMergedShapelets.get(i).size() - 4;
+                        startPos = val.contentInMergedShapelets.get(i).get(size + 2).intValue();
+                        currentSHapelet = new ArrayList<Double>();
+                        for (int j = 0; j < 4; j++) {
+                            if (startPos > j) {
+                                currentSHapelet.add(-100.00);
+                            } else if (startPos + size < j) {
+                                currentSHapelet.add(-100.00);
+                            } else {
+                                currentSHapelet.add(val.contentInMergedShapelets.get(i).get(j));
+                            }
+                        }
+                        shapelets.add(currentSHapelet);
+                    }
+                    //plot graph for each event using shapelets 2d arraylist
+                    System.out.println(val.contentInMergedShapelets);
+                }
             }
         }
         catch (Exception e) {
