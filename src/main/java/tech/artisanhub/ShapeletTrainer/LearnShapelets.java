@@ -13,23 +13,18 @@ import java.util.Map;
 public class LearnShapelets
 {
     public static void main( String[] args )
-    {
+    {       long startTime = System.currentTimeMillis();
         try {
-            // mandatory requirements: numShapelets (k), min shapelet length, max shapelet length, input
-            // data
-            // additional information: log output dir
 
-            // example filter, k = 10, minLength = 20, maxLength = 40, data = , output = exampleOutput.txt
-            int k = Integer.MAX_VALUE; // number of shapelets
-
-            int minLength = 2;
-            int maxLength = 4;
-            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/Diabatese/arff-pima-indians-diabetes.data";
-//            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
+            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
             Instances data = ShapeletFilter.loadData(ARFFName);
 
-            String outPutFile =  "/home/jawadhsr/Desktop/FYP/FIles/Diabatese/Shaplets.txt";
-//            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
+            int k = Integer.MAX_VALUE; // number of shapelets
+            int minLength = 2;
+            int maxLength = data.get(1).numValues()-1;
+            int shapeletClusterSize = 15;
+
+            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
             ArrayList<Shapelet> generatedShapelets = sf.process(data);
@@ -38,18 +33,14 @@ public class LearnShapelets
             for (double val: classDist.keySet()){
                 arr.add((int)val);
             }
-            ArrayList<Shapelet> outPut = new ImportantShapelets().GetImportantShapelets(new MergeShapelets().mergeShapelets(generatedShapelets,15),data,arr);
-
-            for(Shapelet val : outPut){
-                if(val != null)
-                 System.out.println(val.contentInMergedShapelets);
-            }
+            ArrayList<Shapelet> outPut = new ImportantShapelets().GetImportantShapelets(new MergeShapelets().mergeShapelets(generatedShapelets,shapeletClusterSize),data,arr);
 
             ArrayList<ArrayList<Double>> shapelets = new ArrayList<ArrayList<Double>>();
             ArrayList<Double> currentSHapelet  = new ArrayList<Double>();
 
             int size = 0;
             int startPos =0;
+            int shapeletVal = 0;
             int sizeOfTheShapelet = 0;
             for(Shapelet val : outPut){
                 shapelets = new ArrayList<ArrayList<Double>>();
@@ -59,13 +50,16 @@ public class LearnShapelets
                         size = val.contentInMergedShapelets.get(i).size() - 4;
                         startPos = val.contentInMergedShapelets.get(i).get(size + 2).intValue();
                         currentSHapelet = new ArrayList<Double>();
-                        for (int j = 0; j < 4; j++) {
+                        shapeletVal = 0;
+                        for (int j = 0; j < data.get(1).numValues()-1; j++) {
                             if (startPos > j) {
+                                shapeletVal ++;
                                 currentSHapelet.add(-100.00);
                             } else if (startPos + size < j) {
+                                shapeletVal ++;
                                 currentSHapelet.add(-100.00);
                             } else {
-                                currentSHapelet.add(val.contentInMergedShapelets.get(i).get(j));
+                                currentSHapelet.add(val.contentInMergedShapelets.get(i).get(j-shapeletVal));
                             }
                         }
                         shapelets.add(currentSHapelet);
@@ -75,14 +69,15 @@ public class LearnShapelets
                     chart.pack( );
                     RefineryUtilities.centerFrameOnScreen( chart );
                     chart.setVisible( true );
-
-                    System.out.println(val.contentInMergedShapelets);
                 }
             }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("\nExecution time in milli seconds: "+totalTime);
     }
 
     private static XYDataset createDataset(ArrayList<ArrayList<Double>> shapelets ,int rowSize)
@@ -90,7 +85,7 @@ public class LearnShapelets
         XYSeriesCollection dataset = new XYSeriesCollection( );
 
         for (int i = 0; i < shapelets.size(); i++) {
-            XYSeries series = series = new XYSeries(i);
+            XYSeries series = new XYSeries(i);
             for (int j = 0; j < rowSize; j++) {
                 double val = shapelets.get(i).get(j).doubleValue();
                 series.add(j,val);
