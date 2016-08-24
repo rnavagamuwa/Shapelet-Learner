@@ -24,12 +24,12 @@ public class LearnShapelets
 
             int minLength = 2;
             int maxLength = 4;
-//            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/IRIS/iris_replacedNamedWithInts.arff";
-            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
+            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/Diabatese/arff-pima-indians-diabetes.data";
+//            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
             Instances data = ShapeletFilter.loadData(ARFFName);
 
-//            String outPutFile =  "/home/jawadhsr/Desktop/FYP/FIles/IRIS/Shaplets.txt";
-            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
+            String outPutFile =  "/home/jawadhsr/Desktop/FYP/FIles/Diabatese/Shaplets.txt";
+//            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
             ArrayList<Shapelet> generatedShapelets = sf.process(data);
