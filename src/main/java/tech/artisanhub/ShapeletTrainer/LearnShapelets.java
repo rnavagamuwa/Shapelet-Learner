@@ -28,51 +28,19 @@ public class LearnShapelets
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
             ArrayList<Shapelet> generatedShapelets = sf.process(data);
+
+
             Map<Double,Integer> classDist = ShapeletFilter.getClassDistributions(data);
             ArrayList<Integer> arr = new ArrayList<Integer>();
             for (double val: classDist.keySet()){
                 arr.add((int)val);
             }
-            ArrayList<Shapelet> outPut = new ImportantShapelets().GetImportantShapelets(new MergeShapelets().mergeShapelets(generatedShapelets,shapeletClusterSize),data,arr);
 
-            ArrayList<ArrayList<Double>> shapelets = new ArrayList<ArrayList<Double>>();
-            ArrayList<Double> currentSHapelet  = new ArrayList<Double>();
+            ArrayList<Shapelet> mergedShapelets = new MergeShapelets().mergeShapelets(generatedShapelets,shapeletClusterSize); //meerging shapelets
+            ArrayList<Shapelet> finalOutputShapelets = new ImportantShapelets().GetImportantShapelets(mergedShapelets,data,arr); //find important shapelets
+            displayShapeletStats(finalOutputShapelets,data.get(1).numValues()-1);
 
-            int size = 0;
-            int startPos =0;
-            int shapeletVal = 0;
-            int sizeOfTheShapelet = 0;
-            int eventCount =0;
-            for(Shapelet val : outPut){
-                eventCount ++;
-                shapelets = new ArrayList<ArrayList<Double>>();
-                if(val != null) {
-                    sizeOfTheShapelet = val.contentInMergedShapelets.size();
-                    for (int i = 0; i < sizeOfTheShapelet; i++) {
-                        size = val.contentInMergedShapelets.get(i).size() - 4;
-                        startPos = val.contentInMergedShapelets.get(i).get(size + 2).intValue();
-                        currentSHapelet = new ArrayList<Double>();
-                        shapeletVal = 0;
-                        for (int j = 0; j < data.get(1).numValues()-1; j++) {
-                            if (startPos > j) {
-                                shapeletVal ++;
-                                currentSHapelet.add(-100.00);
-                            } else if (startPos + size < j) {
-                                shapeletVal ++;
-                                currentSHapelet.add(-100.00);
-                            } else {
-                                currentSHapelet.add(val.contentInMergedShapelets.get(i).get(j-shapeletVal));
-                            }
-                        }
-                        shapelets.add(currentSHapelet);
-                    }
 
-                    XYLineChart_AWT chart = new XYLineChart_AWT("Shapelet Learner", "Shapelets stats for event "+eventCount,createDataset(shapelets,data.get(1).numValues()-1));
-                    chart.pack( );
-                    RefineryUtilities.centerFrameOnScreen( chart );
-                    chart.setVisible( true );
-                }
-            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -82,20 +50,39 @@ public class LearnShapelets
         System.out.println("\nExecution time in milli seconds: "+totalTime);
     }
 
-    private static XYDataset createDataset(ArrayList<ArrayList<Double>> shapelets ,int rowSize)
-    {
-        XYSeriesCollection dataset = new XYSeriesCollection( );
+    private static void displayShapeletStats(ArrayList<Shapelet> shapelets,int noOfColumns){
+        int size = 0;
+        int startPos =0;
+        int shapeletVal = 0;
+        int sizeOfTheShapelet = 0;
+        int eventCount =0;
+        for(Shapelet val : shapelets){
+            eventCount ++;
+            if(val != null) {
+                sizeOfTheShapelet = val.contentInMergedShapelets.size();
+                XYSeriesCollection dataset = new XYSeriesCollection( );
+                for (int i = 0; i < sizeOfTheShapelet; i++) {
+                    size = val.contentInMergedShapelets.get(i).size() - 4;
+                    startPos = val.contentInMergedShapelets.get(i).get(size + 2).intValue();
+                    shapeletVal = 0;
+                    XYSeries series = new XYSeries(i);
+                    for (int j = 0; j < noOfColumns; j++) {
+                        if (startPos > j) {
+                            shapeletVal ++;
+                        } else if (startPos + size < j) {
+                            shapeletVal ++;
+                        } else {
+                            series.add(j,val.contentInMergedShapelets.get(i).get(j-shapeletVal));
+                        }
+                    }
+                    dataset.addSeries(series);
+                }
 
-        for (int i = 0; i < shapelets.size(); i++) {
-            XYSeries series = new XYSeries(i);
-            for (int j = 0; j < rowSize; j++) {
-                double val = shapelets.get(i).get(j).doubleValue();
-                if (val < -80)
-                    continue;
-                series.add(j,val);
+                XYLineChart_AWT chart = new XYLineChart_AWT("Shapelet Learner", "Shapelets stats for event "+eventCount,dataset);
+                chart.pack( );
+                RefineryUtilities.centerFrameOnScreen( chart );
+                chart.setVisible( true );
             }
-            dataset.addSeries(series);
         }
-        return dataset;
     }
 }
