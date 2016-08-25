@@ -42,7 +42,9 @@ public class LearnShapelets
             int startPos =0;
             int shapeletVal = 0;
             int sizeOfTheShapelet = 0;
+            int eventCount =0;
             for(Shapelet val : outPut){
+                eventCount ++;
                 shapelets = new ArrayList<ArrayList<Double>>();
                 if(val != null) {
                     sizeOfTheShapelet = val.contentInMergedShapelets.size();
@@ -65,7 +67,7 @@ public class LearnShapelets
                         shapelets.add(currentSHapelet);
                     }
 
-                    XYLineChart_AWT chart = new XYLineChart_AWT("Shapelet Learner", "Shapelets stats",createDataset(shapelets,data.get(1).numValues()-1));
+                    XYLineChart_AWT chart = new XYLineChart_AWT("Shapelet Learner", "Shapelets stats for event "+eventCount,createDataset(shapelets,data.get(1).numValues()-1));
                     chart.pack( );
                     RefineryUtilities.centerFrameOnScreen( chart );
                     chart.setVisible( true );
