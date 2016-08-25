@@ -16,15 +16,17 @@ public class LearnShapelets
     {       long startTime = System.currentTimeMillis();
         try {
 
-            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
+            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/IRIS/example.arff";
+//            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
             Instances data = ShapeletFilter.loadData(ARFFName);
 
             int k = Integer.MAX_VALUE; // number of shapelets
             int minLength = 2;
             int maxLength = data.get(1).numValues()-1;
-            int shapeletClusterSize = 15;
+            int shapeletClusterSize = 5;
 
-            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
+            String outPutFile = "/home/jawadhsr/Desktop/FYP/FIles/IRIS/shapelets.txt";
+//            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
             ArrayList<Shapelet> generatedShapelets = sf.process(data);
