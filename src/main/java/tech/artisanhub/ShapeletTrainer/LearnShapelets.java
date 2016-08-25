@@ -16,17 +16,15 @@ public class LearnShapelets
     {       long startTime = System.currentTimeMillis();
         try {
 
-            String ARFFName = "/home/jawadhsr/Desktop/FYP/FIles/IRIS/example.arff";
-//            String ARFFName = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/iris_replacedNamedWithInts.arff";
+            String ARFFName = "dataset/pima-indians-diabetes.arff";
             Instances data = ShapeletFilter.loadData(ARFFName);
 
             int k = Integer.MAX_VALUE; // number of shapelets
             int minLength = 2;
             int maxLength = data.get(1).numValues()-1;
-            int shapeletClusterSize = 5;
+            int shapeletClusterSize = 40; //this defines the threshold. Put a larger number to detect all the events
 
-            String outPutFile = "/home/jawadhsr/Desktop/FYP/FIles/IRIS/shapelets.txt";
-//            String outPutFile = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/IRIS/shapelets.txt";
+            String outPutFile = "dataset/generatedShapelets.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
             sf.setLogOutputFile(outPutFile); // log file stores shapelet output
             ArrayList<Shapelet> generatedShapelets = sf.process(data);
@@ -67,7 +65,7 @@ public class LearnShapelets
                         shapelets.add(currentSHapelet);
                     }
 
-                    XYLineChart_AWT chart = new XYLineChart_AWT("Shapelets stats", "Shapelets stats",createDataset(shapelets,data.get(1).numValues()-1));
+                    XYLineChart_AWT chart = new XYLineChart_AWT("Shapelet Learner", "Shapelets stats",createDataset(shapelets,data.get(1).numValues()-1));
                     chart.pack( );
                     RefineryUtilities.centerFrameOnScreen( chart );
                     chart.setVisible( true );
@@ -90,6 +88,8 @@ public class LearnShapelets
             XYSeries series = new XYSeries(i);
             for (int j = 0; j < rowSize; j++) {
                 double val = shapelets.get(i).get(j).doubleValue();
+                if (val < -80)
+                    continue;
                 series.add(j,val);
             }
             dataset.addSeries(series);

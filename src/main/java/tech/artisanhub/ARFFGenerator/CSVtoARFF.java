@@ -8,22 +8,20 @@ import java.io.File;
 
 public class CSVtoARFF {
 
-    private static final String TRAINING_DATA = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/DEBS-2013-SoccerField/result_1st_goal.txt";
-    private static final String OUTPUT_DATA = "/home/rnavagamuwa/Documents/CSE/FYP/Datasets/DEBS-2013-SoccerField/ARFF_result_1st_goal.arff";
+    private static final String TRAINING_DATA = "dataset/pima-indians-diabetes.data";
+    private static final String OUTPUT_DATA = "dataset/pima-indians-diabetes.arff";
 
 
 
 
     public static void main(String[] args) throws Exception {
 
-        String salihPath = "/home/jawadhsr/Desktop/FYP/FIles/iris_replacedNamedWithInts.csv";
         // load CSV
         CSVLoader loader = new CSVLoader();
         loader.setSource(new File(TRAINING_DATA));
         Instances data = loader.getDataSet();
         System.out.println("Source CSV has been successfully loaded");
 
-        String salihOutput = "/home/jawadhsr/Desktop/FYP/FIles/output.arff";
         // save ARFF
         ArffSaver saver = new ArffSaver();
         saver.setInstances(data);
