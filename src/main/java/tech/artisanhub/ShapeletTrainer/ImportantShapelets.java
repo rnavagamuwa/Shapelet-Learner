@@ -26,30 +26,36 @@ public class ImportantShapelets {
         System.out.println(classValues.size());
         System.out.println(shapeletBucket.size());
         Map<Integer,Double> clasNprob = new HashMap<Integer, Double>();
+
         for (Shapelet s : shapelets) {
-            for(Integer val : MaxProbClassVal(s).keySet()){
-                clasNprob.put(val,MaxProbClassVal(s).get(val));
+            // Size of MaxProbClassVal is always one as it returns only a key value pair.
+            //where key is the class value and value is the probability.
+            for(Integer val : MaxProbClassVal(s).keySet()) {
+
+                clasNprob.put(val, MaxProbClassVal(s).get(val));
+                // clas = Integer.parseInt(clasNprob.keySet().toArray()[0].toString());
+                shapeletBucket.get(val).put(s);
             }
 
-            // above method has to be changed and for that attributes
-            // of shapelets also has to be changed.
-            Integer clas = Integer.parseInt(clasNprob.keySet().toArray()[0].toString());
-            shapeletBucket.get(clas).put(s);
         }
         Map <Integer,Map<Shapelet,Double>> shapeDiff = new HashMap<Integer, Map<Shapelet, Double>>();
+        int i=0;
         for (int clas : classValues) {
             Map<Shapelet,Double> temp = new HashMap<Shapelet, Double>();
+            double aVal = classValProbs.get(i);
+            i++;
             for (Shapelet s : shapeletBucket.get(clas).getShapeletSet()) {
-                //temp.put(s,0.4);
+
                 double val = clasNprob.get(clas);
-                temp.put(s, val - classValProbs.get(clas));
+                temp.put(s, val - aVal);
                 //differences[clas][s.seriesId] = Math.abs(/*Here the prob(class Val) of shapelt has to be included. */-classValProbs.get(clas));
                 // this has to be changed. The above is wrong.
             }
             shapeDiff.put(clas,temp);
 
+            Map<Shapelet,Double> tmp = shapeDiff.get(clas);
             // Done. Now Test the values.
-            Shapelet newShape = GetMinDifShape(shapeDiff.get(clas));
+            Shapelet newShape = GetMinDifShape(tmp);
             // Have to change this heavily.
             shapeletsArr.add(newShape);
         }
