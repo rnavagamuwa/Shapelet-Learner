@@ -150,7 +150,7 @@ public class ShapeletFilter {
             this.shapelets = findBestKShapeletsCache(this.numShapelets, data, this.minShapeletLength,
                     this.maxShapeletLength); // get k shapelets ATTENTION
             this.shapeletsTrained = true;
-            System.out.println(shapelets.size() + " Shapelets have been generated");
+            System.out.println("\n"+shapelets.size() + " Shapelets have been generated");
         }
 
 //        Instances output = determineOutputFormat(data);
@@ -274,22 +274,6 @@ public class ShapeletFilter {
                 out.append("\n");
             }
             out.close();
-        }
-        System.out.println();
-        System.out.println("Output Shapelets:");
-        System.out.println("-------------------");
-        System.out.println("informationGain,seriesId,startPos");
-        System.out.println("<shapelet>");
-        System.out.println("-------------------");
-        System.out.println();
-        for (int i = 0; i < kShapelets.size(); i++) {
-            System.out.println(kShapelets.get(i).informationGain + "," + kShapelets.get(i).seriesId + ","
-                    + kShapelets.get(i).startPos);
-            double[] shapeletContent = kShapelets.get(i).content;
-            for (int j = 0; j < shapeletContent.length; j++) {
-                System.out.print(shapeletContent[j] + ",");
-            }
-            System.out.println();
         }
 
         return kShapelets;
