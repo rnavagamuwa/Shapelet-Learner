@@ -15,7 +15,7 @@ public class ImportantShapelets {
         ArrayList<Shapelet> shapeletsArr = new ArrayList<Shapelet>();
         ArrayList<Double> classValProbs = new ArrayList<Double>();
         Map<Integer, ShapeletBucket> shapeletBucket = new HashMap<Integer, ShapeletBucket>();
-
+        System.out.println();
         for (int i = 0; i < classValues.size(); i++) {
             ShapeletBucket temp = new ShapeletBucket(classValues.get(i));
 
@@ -23,8 +23,6 @@ public class ImportantShapelets {
             shapeletBucket.put(classValues.get(i), temp);
             //remember Above can be optimized.
         }
-        System.out.println(classValues.size());
-        System.out.println(shapeletBucket.size());
         Map<Integer,Double> clasNprob = new HashMap<Integer, Double>();
 
         for (Shapelet s : shapelets) {
