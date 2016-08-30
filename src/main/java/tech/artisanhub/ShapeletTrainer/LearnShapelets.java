@@ -22,7 +22,7 @@ public class LearnShapelets
             int k = Integer.MAX_VALUE; // number of shapelets
             int minLength = 2;
             int maxLength = data.get(1).numValues()-1;
-            int shapeletClusterSize = 90; //this defines the threshold. Put a larger number to detect all the events
+            int shapeletClusterSize = (int) Math.sqrt(data.size()); //this defines the threshold. Put a larger number to detect all the events
 
             String outPutFile = "dataset/generatedShapelets.txt";
             ShapeletFilter sf = new ShapeletFilter(k, minLength, maxLength);
